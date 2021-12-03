@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front
+  labels:
+    app: front
+spec:
+  replicas: {{.Values.front.replicaCount}}
+  selector:
+    matchLabels:
+      app: front
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      containers:
+        - name: front
+          image: front:{{ .Values.front.version }}
+          ports:
+          - name: http
+            containerPort: {{ .Values.front.containerPort }}
+            protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
